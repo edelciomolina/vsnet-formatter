@@ -28,6 +28,7 @@ describe("deploy", () => {
             expect.stringMatching(/vsce(?:\.cmd)?$/),
             ["publish", "minor", "--message", "chore(release): %s"]
         );
+        expect(runCommand).toHaveBeenNthCalledWith(3, "git", ["push", "--follow-tags"]);
     });
 
     it("publishes the requested valid release", () => {
@@ -35,10 +36,12 @@ describe("deploy", () => {
 
         deploy("minor", runCommand);
 
-        expect(runCommand).toHaveBeenLastCalledWith(
+        expect(runCommand).toHaveBeenNthCalledWith(
+            2,
             expect.any(String),
             ["publish", "minor", "--message", "chore(release): %s"]
         );
+        expect(runCommand).toHaveBeenLastCalledWith("git", ["push", "--follow-tags"]);
     });
 
     it("rejects invalid releases without running commands", () => {

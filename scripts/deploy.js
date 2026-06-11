@@ -10,6 +10,7 @@ function deploy(release = "minor", runCommand = run) {
 
     runCommand("npm", ["run", "check"]);
     runCommand(vsceExecutable(), ["publish", release, "--message", "chore(release): %s"]);
+    runCommand("git", ["push", "--follow-tags"]);
 }
 
 function isValidRelease(release) {

@@ -28,12 +28,12 @@ publisher ID.
 Run deployments with a clean Git working tree:
 
 ```powershell
-npm run deploy
-npm run deploy -- minor
-npm run deploy -- major
-npm run deploy -- 1.2.3
+npm run publish
+npm run publish -- patch
+npm run publish -- major
+npm run publish -- 1.2.3
 ```
 
-The deploy command validates the project, updates the version in the manifest
-and lockfile, creates the version commit and tag, and publishes directly to the
-Visual Studio Marketplace.
+The publish command validates the project, updates the version, creates the
+version commit and tag, publishes to the Visual Studio Marketplace, and pushes
+to GitHub.
