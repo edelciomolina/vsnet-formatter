@@ -65,6 +65,7 @@
         "test": "vitest run",
         "test:watch": "vitest",
         "test:coverage": "vitest run --coverage",
+        "test:integration": "node scripts/test-integration.js",
         "package": "npm run check && vsce package",
         "publish": "node scripts/deploy.js",
         "vscode:prepublish": "npm run check"
