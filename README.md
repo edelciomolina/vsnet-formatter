@@ -1,6 +1,6 @@
 # VS.NET Formatter
 
-Format CSS, HTML, JavaScript and ASPX files in VS Code with the same formatting engine used by Visual Studio. 🎯
+🎯 Format CSS, HTML, JavaScript and ASPX files in VS Code with the same formatting engine used by Visual Studio. 
 
 VS.NET Formatter delegates each formatting request to Visual Studio's
 `Edit.FormatDocument` command. This preserves the formatting style expected by
