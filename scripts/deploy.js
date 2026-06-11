@@ -3,7 +3,7 @@ const path = require("path");
 
 const validRelease = /^(patch|minor|major|\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?)$/;
 
-function deploy(release = "patch", runCommand = run) {
+function deploy(release = "minor", runCommand = run) {
     if (!isValidRelease(release)) {
         throw new Error(`Invalid release "${release}". Use patch, minor, major or an explicit semver.`);
     }
