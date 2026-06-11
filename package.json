@@ -60,7 +60,7 @@
         "test:watch": "vitest",
         "test:coverage": "vitest run --coverage",
         "package": "npm run check && vsce package",
-        "deploy": "node scripts/deploy.js",
+        "publish": "node scripts/deploy.js",
         "vscode:prepublish": "npm run check"
     },
     "devDependencies": {
