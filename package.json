@@ -1,0 +1,95 @@
+{
+    "name": "vsnet-web-formatter",
+    "displayName": "VS.NET Web Formatter",
+    "description": "Zero-configuration CSS formatting in VS Code using Visual Studio's Format Document command.",
+    "version": "0.0.1",
+    "publisher": "simplificaci",
+    "author": {
+        "name": "Edelcio Molina",
+        "url": "https://github.com/edelciomolina"
+    },
+    "license": "MIT",
+    "pricing": "Free",
+    "icon": "icon.png",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/edelciomolina/vsnet-formatter.git"
+    },
+    "bugs": {
+        "url": "https://github.com/edelciomolina/vsnet-formatter/issues"
+    },
+    "homepage": "https://github.com/edelciomolina/vsnet-formatter#readme",
+    "engines": {
+        "vscode": "^1.80.0"
+    },
+    "categories": [
+        "Formatters"
+    ],
+    "keywords": [
+        "css",
+        "formatter",
+        "zero configuration",
+        "visual studio",
+        "vsnet",
+        "asp.net",
+        "web forms"
+    ],
+    "galleryBanner": {
+        "color": "#111827",
+        "theme": "dark"
+    },
+    "extensionKind": [
+        "ui"
+    ],
+    "capabilities": {
+        "untrustedWorkspaces": {
+            "supported": true
+        },
+        "virtualWorkspaces": {
+            "supported": false,
+            "description": "VS.NET Web Formatter requires Windows and Visual Studio 2022, which are not available in virtual workspaces."
+        }
+    },
+    "activationEvents": [
+        "onLanguage:css"
+    ],
+    "main": "./extension.js",
+    "scripts": {
+        "check": "node --check extension.js && node --check lib/formatter.js && node --check scripts/deploy.js && node scripts/validate.js && npm run test:coverage",
+        "test": "vitest run",
+        "test:watch": "vitest",
+        "test:coverage": "vitest run --coverage",
+        "package": "npm run check && vsce package",
+        "deploy": "node scripts/deploy.js",
+        "vscode:prepublish": "npm run check"
+    },
+    "devDependencies": {
+        "@vitest/coverage-v8": "^4.1.8",
+        "@vscode/vsce": "^3.9.2",
+        "vitest": "^4.1.8"
+    },
+    "contributes": {
+        "configurationDefaults": {
+            "css.format.enable": false,
+            "[css]": {
+                "editor.defaultFormatter": "simplificaci.vsnet-web-formatter"
+            }
+        },
+        "configuration": {
+            "title": "VS.NET Web Formatter",
+            "properties": {
+                "vsnetWebFormatter.visualStudioProgId": {
+                    "type": "string",
+                    "default": "VisualStudio.DTE.17.0",
+                    "description": "Visual Studio DTE ProgID used to format documents."
+                },
+                "vsnetWebFormatter.timeout": {
+                    "type": "number",
+                    "default": 120000,
+                    "minimum": 1000,
+                    "description": "Maximum formatting time in milliseconds."
+                }
+            }
+        }
+    }
+}

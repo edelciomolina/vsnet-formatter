@@ -1,0 +1,12 @@
+.github/**
+scripts/**
+test/**
+coverage/**
+vitest.config.mjs
+CONTRIBUTING.md
+PUBLISHING.md
+.gitignore
+package-lock.json
+node_modules/**
+*.vsix
+*.log
