@@ -1,8 +1,8 @@
 {
     "name": "vsnet-web-formatter",
     "displayName": "VS.NET Formatter",
-    "description": "Zero-configuration CSS formatting in VS Code using Visual Studio's Format Document command.",
-    "version": "0.5.0",
+    "description": "Zero-configuration CSS, HTML, JavaScript and ASPX formatting in VS Code using Visual Studio's Format Document command.",
+    "version": "0.6.0",
     "publisher": "edelciomolina",
     "author": {
         "name": "Edelcio Molina",
@@ -27,6 +27,9 @@
     ],
     "keywords": [
         "css",
+        "html",
+        "javascript",
+        "aspx",
         "formatter",
         "zero configuration",
         "visual studio",
@@ -51,7 +54,10 @@
         }
     },
     "activationEvents": [
-        "onLanguage:css"
+        "onLanguage:css",
+        "onLanguage:html",
+        "onLanguage:javascript",
+        "onLanguage:aspnet"
     ],
     "main": "./extension.js",
     "scripts": {
@@ -72,6 +78,15 @@
         "configurationDefaults": {
             "css.format.enable": false,
             "[css]": {
+                "editor.defaultFormatter": "edelciomolina.vsnet-web-formatter"
+            },
+            "[html]": {
+                "editor.defaultFormatter": "edelciomolina.vsnet-web-formatter"
+            },
+            "[javascript]": {
+                "editor.defaultFormatter": "edelciomolina.vsnet-web-formatter"
+            },
+            "[aspnet]": {
                 "editor.defaultFormatter": "edelciomolina.vsnet-web-formatter"
             }
         },

@@ -1,37 +1,34 @@
 # VS.NET Formatter
 
-Format CSS in VS Code with the same formatting engine used by Visual Studio. 🎯
+Format CSS, HTML, JavaScript and ASPX files in VS Code with the same formatting engine used by Visual Studio. 🎯
 
-VS.NET Formatter delegates each CSS formatting request to Visual Studio's
+VS.NET Formatter delegates each formatting request to Visual Studio's
 `Edit.FormatDocument` command. This preserves the formatting style expected by
-legacy ASP.NET and ASP.NET Web Forms projects, including hierarchical CSS
-indentation that differs from common web formatters.
+legacy ASP.NET and ASP.NET Web Forms projects across all supported file types.
 
 The extension works immediately after installation. It automatically becomes
-the default CSS formatter while installed, with no workspace or user settings
-required.
+the default formatter for CSS, HTML, JavaScript and ASPX files while installed,
+with no workspace or user settings required.
 
 Find it in the VS Code Extensions view with `@category:"formatters"`.
 
 ## ✨ What It Formats
 
-The extension formats `.css` documents opened in VS Code.
+The extension formats `.css`, `.html`, `.js` and `.aspx` documents opened in VS Code.
 
-It is designed for stylesheets where the expected output is Visual Studio's
-**Format Document** result rather than Prettier or VS Code's built-in CSS
-formatter output.
+It is designed for projects where the expected output is Visual Studio's
+**Format Document** result rather than Prettier or VS Code's built-in formatters.
 
 ## 🎨 Formatting Behavior
 
-- Uses the actual Visual Studio CSS formatting engine.
-- Preserves Visual Studio's hierarchical CSS indentation.
+- Uses the actual Visual Studio formatting engine for each file type.
 - Produces the same style as Visual Studio's `Ctrl+K, Ctrl+D`.
 - Runs Visual Studio hidden while formatting.
 - Cleans up temporary formatting files automatically.
 - Retries temporary Visual Studio automation failures.
 - Leaves unchanged documents untouched.
 
-Run VS Code's **Format Document** command or press `Shift+Alt+F` in a CSS file.
+Run VS Code's **Format Document** command or press `Shift+Alt+F` in any supported file.
 
 ## 📋 Requirements
 
@@ -54,8 +51,8 @@ different Visual Studio installation or timeout is required:
 
 ## 🔎 Scope
 
-VS.NET Formatter formats CSS only. It does not format HTML, ASPX,
-JavaScript, C#, or project files.
+VS.NET Formatter formats CSS, HTML, JavaScript and ASPX files. It does not
+format C#, VB.NET, or project files.
 
 ## 📄 License
 

@@ -19,8 +19,18 @@ describe("formatter utilities", () => {
         expect(stripBom("body {}")).toBe("body {}");
     });
 
-    it("uses CSS as the fallback language extension", () => {
+    it("returns .css for the css language", () => {
         expect(extensionForLanguage("css")).toBe(".css");
+    });
+
+    it("returns the correct extension for each supported language", () => {
+        expect(extensionForLanguage("html")).toBe(".html");
+        expect(extensionForLanguage("javascript")).toBe(".js");
+        expect(extensionForLanguage("aspnet")).toBe(".aspx");
+    });
+
+    it("falls back to .css for unknown languages", () => {
+        expect(extensionForLanguage("unknown")).toBe(".css");
     });
 });
 

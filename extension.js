@@ -2,7 +2,7 @@ const vscode = require("vscode");
 const path = require("path");
 const { createFormatDocument } = require("./lib/formatter");
 
-const supportedLanguages = ["css"];
+const supportedLanguages = ["css", "html", "javascript", "aspnet"];
 
 function activate(context) {
     const formatDocument = createFormatDocument({
@@ -20,6 +20,6 @@ function activate(context) {
     }
 }
 
-function deactivate() {}
+function deactivate() { }
 
 module.exports = { activate, deactivate };
