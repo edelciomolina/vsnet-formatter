@@ -2,6 +2,7 @@
 scripts/**
 test/**
 coverage/**
+temp/**
 vitest.config.mjs
 CONTRIBUTING.md
 PUBLISHING.md

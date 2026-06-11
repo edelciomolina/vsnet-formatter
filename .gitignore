@@ -3,3 +3,4 @@ coverage/
 *.vsix
 *.log
 .env
+temp/
