@@ -1,16 +1,75 @@
 const { spawnSync } = require("child_process");
+const { readFileSync } = require("fs");
+const { createInterface } = require("readline");
 const path = require("path");
 
 const validRelease = /^(patch|minor|major|\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?)$/;
 
-function deploy(release = "minor", runCommand = run) {
+function checkPrerequisites(spawn = spawnSync) {
+    const vsceExe = vsceExecutable();
+    const vsceWhoami = spawn(vsceExe, ["verify-pat", "edelciomolina"], {
+        cwd: path.join(__dirname, ".."),
+        encoding: "utf8",
+        shell: process.platform === "win32"
+    });
+    if (vsceWhoami.status !== 0) {
+        throw new Error(
+            "Not logged in to vsce. Run:\n\n  npx vsce login edelciomolina\n\nThen retry npm run publish."
+        );
+    }
+}
+
+/* v8 ignore start — readline wrapper, tested via askFn injection */
+function ask(prompt) {
+    const rl = createInterface({ input: process.stdin, output: process.stdout });
+    return new Promise(resolve => rl.question(prompt, answer => { rl.close(); resolve(answer.trim()); }));
+}
+/* v8 ignore stop */
+
+function bumpVersion(current, release) {
+    if (/^\d+\.\d+\.\d+/.test(release)) {
+        return release;
+    }
+    const [major, minor, patch] = current.split(".").map(Number);
+    if (release === "major") return `${major + 1}.0.0`;
+    if (release === "minor") return `${major}.${minor + 1}.0`;
+    return `${major}.${minor}.${patch + 1}`;
+}
+
+async function deploy(release = "minor", runCommand = run, askFn = ask) {
     if (!isValidRelease(release)) {
         throw new Error(`Invalid release "${release}". Use patch, minor, major or an explicit semver.`);
     }
 
+    const root = path.join(__dirname, "..");
+
+    checkPrerequisites();
     runCommand("npm", ["run", "check"]);
-    runCommand(vsceExecutable(), ["publish", release, "--message", "chore(release): %s"]);
-    runCommand("git", ["push", "--follow-tags"]);
+
+    const pkg = JSON.parse(readFileSync(path.join(root, "package.json"), "utf8"));
+    const newVersion = bumpVersion(pkg.version, release);
+
+    runCommand(vsceExecutable(), ["publish", release, "--no-git-tag-version"]);
+
+    console.log("\n" + "=".repeat(60));
+    console.log(`Published v${newVersion} successfully!`);
+    console.log(`  VS Code Marketplace: https://marketplace.visualstudio.com/items?itemName=edelciomolina.vsnet-web-formatter`);
+    console.log("=".repeat(60));
+
+    const doGit = await askFn(`\nCommit and push "chore(release): v${newVersion}"? [Y/n] `);
+    if (doGit.toLowerCase() !== "n") {
+        runCommand("git", ["add", "."]);
+        runCommand("git", ["commit", "-m", `chore(release): v${newVersion}`]);
+        runCommand("git", ["tag", `v${newVersion}`]);
+        runCommand("git", ["push", "--follow-tags"]);
+        console.log("\nGit commit, tag, and push completed.");
+    } else {
+        console.log("\nManual git steps:");
+        console.log(`  git add .`);
+        console.log(`  git commit -m "chore(release): v${newVersion}"`);
+        console.log(`  git tag v${newVersion}`);
+        console.log(`  git push --follow-tags`);
+    }
 }
 
 function isValidRelease(release) {
@@ -43,9 +102,9 @@ function run(command, args, spawn = spawnSync, platform = process.platform) {
     }
 }
 
-function main(args = process.argv.slice(2), logger = console, deployAction = deploy) {
+async function main(args = process.argv.slice(2), logger = console, deployAction = deploy) {
     try {
-        deployAction(args[0]);
+        await deployAction(args[0]);
         return 0;
     } catch (error) {
         logger.error(error.message);
@@ -53,8 +112,9 @@ function main(args = process.argv.slice(2), logger = console, deployAction = dep
     }
 }
 
+/* v8 ignore next */
 if (require.main === module) {
-    process.exitCode = main();
+    main().then(code => { process.exitCode = code; });
 }
 
-module.exports = { deploy, isValidRelease, main, run, vsceExecutable };
+module.exports = { deploy, bumpVersion, checkPrerequisites, isValidRelease, main, run, vsceExecutable, ask };

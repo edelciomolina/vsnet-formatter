@@ -2,7 +2,7 @@ import path from "node:path";
 import { describe, expect, it, vi } from "vitest";
 import deployModule from "../scripts/deploy.js";
 
-const { deploy, isValidRelease, main, run, vsceExecutable } = deployModule;
+const { deploy, bumpVersion, checkPrerequisites, isValidRelease, main, run, vsceExecutable } = deployModule;
 
 describe("release validation", () => {
     it.each(["patch", "minor", "major", "1.2.3", "1.2.3-beta.1"])(
@@ -16,38 +16,77 @@ describe("release validation", () => {
     );
 });
 
+describe("bumpVersion", () => {
+    it("bumps patch", () => expect(bumpVersion("1.2.3", "patch")).toBe("1.2.4"));
+    it("bumps minor", () => expect(bumpVersion("1.2.3", "minor")).toBe("1.3.0"));
+    it("bumps major", () => expect(bumpVersion("1.2.3", "major")).toBe("2.0.0"));
+    it("uses explicit version as-is", () => expect(bumpVersion("1.2.3", "4.5.6")).toBe("4.5.6"));
+});
+
+describe("checkPrerequisites", () => {
+    it("succeeds when vsce PAT is valid", () => {
+        const spawn = vi.fn(() => ({ status: 0 }));
+        expect(() => checkPrerequisites(spawn)).not.toThrow();
+    });
+
+    it("throws when vsce PAT is not configured", () => {
+        const spawn = vi.fn(() => ({ status: 1 }));
+        expect(() => checkPrerequisites(spawn)).toThrow("Not logged in to vsce");
+    });
+});
+
 describe("deploy", () => {
-    it("validates before publishing a minor release by default", () => {
+    const noGit = vi.fn().mockResolvedValue("n");
+
+    it("runs check and publishes a minor release by default", async () => {
         const runCommand = vi.fn();
 
-        deploy(undefined, runCommand);
+        await deploy(undefined, runCommand, noGit);
 
         expect(runCommand).toHaveBeenNthCalledWith(1, "npm", ["run", "check"]);
         expect(runCommand).toHaveBeenNthCalledWith(
             2,
             expect.stringMatching(/vsce(?:\.cmd)?$/),
-            ["publish", "minor", "--message", "chore(release): %s"]
+            ["publish", "minor", "--no-git-tag-version"]
         );
-        expect(runCommand).toHaveBeenNthCalledWith(3, "git", ["push", "--follow-tags"]);
     });
 
-    it("publishes the requested valid release", () => {
+    it("publishes the requested valid release", async () => {
         const runCommand = vi.fn();
 
-        deploy("minor", runCommand);
+        await deploy("patch", runCommand, noGit);
 
         expect(runCommand).toHaveBeenNthCalledWith(
             2,
             expect.any(String),
-            ["publish", "minor", "--message", "chore(release): %s"]
+            ["publish", "patch", "--no-git-tag-version"]
         );
-        expect(runCommand).toHaveBeenLastCalledWith("git", ["push", "--follow-tags"]);
     });
 
-    it("rejects invalid releases without running commands", () => {
+    it("runs git commands when user accepts", async () => {
+        const runCommand = vi.fn();
+        const yesGit = vi.fn().mockResolvedValue("");
+
+        await deploy("patch", runCommand, yesGit);
+
+        expect(runCommand).toHaveBeenCalledWith("git", ["add", "."]);
+        expect(runCommand).toHaveBeenCalledWith("git", expect.arrayContaining(["commit"]));
+        expect(runCommand).toHaveBeenCalledWith("git", expect.arrayContaining(["tag"]));
+        expect(runCommand).toHaveBeenCalledWith("git", ["push", "--follow-tags"]);
+    });
+
+    it("skips git commands when user declines", async () => {
         const runCommand = vi.fn();
 
-        expect(() => deploy("invalid", runCommand)).toThrow("Invalid release");
+        await deploy("patch", runCommand, noGit);
+
+        expect(runCommand).not.toHaveBeenCalledWith("git", expect.anything());
+    });
+
+    it("rejects invalid releases without running commands", async () => {
+        const runCommand = vi.fn();
+
+        await expect(deploy("invalid", runCommand, noGit)).rejects.toThrow("Invalid release");
         expect(runCommand).not.toHaveBeenCalled();
     });
 });
@@ -107,22 +146,22 @@ describe("run", () => {
 });
 
 describe("main", () => {
-    it("returns success after deployment", () => {
+    it("returns success after deployment", async () => {
         const deployAction = vi.fn();
         const logger = { error: vi.fn() };
 
-        expect(main(["minor"], logger, deployAction)).toBe(0);
+        expect(await main(["minor"], logger, deployAction)).toBe(0);
         expect(deployAction).toHaveBeenCalledWith("minor");
         expect(logger.error).not.toHaveBeenCalled();
     });
 
-    it("reports deployment failures", () => {
+    it("reports deployment failures", async () => {
         const deployAction = vi.fn(() => {
             throw new Error("publish failed");
         });
         const logger = { error: vi.fn() };
 
-        expect(main([], logger, deployAction)).toBe(1);
+        expect(await main([], logger, deployAction)).toBe(1);
         expect(logger.error).toHaveBeenCalledWith("publish failed");
     });
 });
