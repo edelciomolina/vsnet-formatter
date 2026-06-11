@@ -1,6 +1,6 @@
 {
     "name": "vsnet-web-formatter",
-    "displayName": "VS.NET Web Formatter",
+    "displayName": "VS.NET Formatter",
     "description": "Zero-configuration CSS formatting in VS Code using Visual Studio's Format Document command.",
     "version": "0.4.0",
     "publisher": "edelciomolina",
@@ -47,7 +47,7 @@
         },
         "virtualWorkspaces": {
             "supported": false,
-            "description": "VS.NET Web Formatter requires Windows and Visual Studio 2022, which are not available in virtual workspaces."
+            "description": "VS.NET Formatter requires Windows and Visual Studio 2022, which are not available in virtual workspaces."
         }
     },
     "activationEvents": [
@@ -76,7 +76,7 @@
             }
         },
         "configuration": {
-            "title": "VS.NET Web Formatter",
+            "title": "VS.NET Formatter",
             "properties": {
                 "vsnetWebFormatter.visualStudioProgId": {
                     "type": "string",

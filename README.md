@@ -1,8 +1,8 @@
-# VS.NET Web Formatter
+# VS.NET Formatter
 
 Format CSS in VS Code with the same formatting engine used by Visual Studio. 🎯
 
-VS.NET Web Formatter delegates each CSS formatting request to Visual Studio's
+VS.NET Formatter delegates each CSS formatting request to Visual Studio's
 `Edit.FormatDocument` command. This preserves the formatting style expected by
 legacy ASP.NET and ASP.NET Web Forms projects, including hierarchical CSS
 indentation that differs from common web formatters.
@@ -54,7 +54,7 @@ different Visual Studio installation or timeout is required:
 
 ## 🔎 Scope
 
-VS.NET Web Formatter formats CSS only. It does not format HTML, ASPX,
+VS.NET Formatter formats CSS only. It does not format HTML, ASPX,
 JavaScript, C#, or project files.
 
 ## 📄 License
