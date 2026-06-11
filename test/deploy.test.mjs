@@ -17,7 +17,7 @@ describe("release validation", () => {
 });
 
 describe("deploy", () => {
-    it("validates before publishing a patch release by default", () => {
+    it("validates before publishing a minor release by default", () => {
         const runCommand = vi.fn();
 
         deploy(undefined, runCommand);
@@ -26,7 +26,7 @@ describe("deploy", () => {
         expect(runCommand).toHaveBeenNthCalledWith(
             2,
             expect.stringMatching(/vsce(?:\.cmd)?$/),
-            ["publish", "patch", "--message", "chore(release): %s"]
+            ["publish", "minor", "--message", "chore(release): %s"]
         );
     });
 
