@@ -4,14 +4,14 @@
 
 Before the first deployment:
 
-1. Create or confirm the `simplificaci` publisher in the
+1. Create or confirm the `edelciomolina` publisher in the
    [Visual Studio Marketplace management portal](https://marketplace.visualstudio.com/manage).
 2. Create an Azure DevOps Personal Access Token with the
    **Marketplace > Manage** permission.
 3. Authenticate `vsce`:
 
 ```powershell
-npx vsce login simplificaci
+npx vsce login edelciomolina
 ```
 
 The token can also be provided through the `VSCE_PAT` environment variable:

@@ -3,7 +3,7 @@
     "displayName": "VS.NET Web Formatter",
     "description": "Zero-configuration CSS formatting in VS Code using Visual Studio's Format Document command.",
     "version": "0.2.0",
-    "publisher": "simplificaci",
+    "publisher": "edelciomolina",
     "author": {
         "name": "Edelcio Molina",
         "url": "https://github.com/edelciomolina"
@@ -72,7 +72,7 @@
         "configurationDefaults": {
             "css.format.enable": false,
             "[css]": {
-                "editor.defaultFormatter": "simplificaci.vsnet-web-formatter"
+                "editor.defaultFormatter": "edelciomolina.vsnet-web-formatter"
             }
         },
         "configuration": {
