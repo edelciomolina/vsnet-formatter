@@ -2,7 +2,7 @@
     "name": "vsnet-web-formatter",
     "displayName": "VS.NET Web Formatter",
     "description": "Zero-configuration CSS formatting in VS Code using Visual Studio's Format Document command.",
-    "version": "0.0.1",
+    "version": "0.1.0",
     "publisher": "simplificaci",
     "author": {
         "name": "Edelcio Molina",
