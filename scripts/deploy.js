@@ -87,9 +87,11 @@ function vsceExecutable(platform = process.platform) {
 }
 
 function run(command, args, spawn = spawnSync, platform = process.platform) {
+    const isVscePublish = args.includes("publish");
     const result = spawn(command, args, {
         cwd: path.join(__dirname, ".."),
-        stdio: "inherit",
+        stdio: isVscePublish ? "pipe" : "inherit",
+        encoding: isVscePublish ? "utf8" : undefined,
         shell: platform === "win32" && (command === "npm" || command.endsWith(".cmd"))
     });
 
@@ -97,7 +99,35 @@ function run(command, args, spawn = spawnSync, platform = process.platform) {
         throw result.error;
     }
 
-    if (result.status !== 0) {
+    if (isVscePublish && result.status !== 0) {
+        const output = (result.stdout || "") + (result.stderr || "");
+        if (output.includes("display name is taken")) {
+            throw new Error(
+                `The display name is already taken on the VS Code Marketplace.\n` +
+                `Change "displayName" in package.json to a unique name, then retry.\n\n` +
+                `  Original error: ${output.trim()}`
+            );
+        }
+        if (output.includes("Personal Access Token")) {
+            throw new Error(
+                `PAT expired or invalid. Run:\n\n  npx vsce login edelciomolina\n\nThen retry.`
+            );
+        }
+        if (output.includes("ENOTFOUND") || output.includes("ETIMEDOUT")) {
+            throw new Error(
+                `Network error reaching the marketplace. Check your connection and retry.\n\n` +
+                `  Original error: ${output.trim()}`
+            );
+        }
+        process.stdout.write(output);
+        throw new Error(`Command failed with exit code ${result.status || 1}: ${command}`);
+    }
+
+    if (isVscePublish && result.stdout) {
+        process.stdout.write(result.stdout);
+    }
+
+    if (!isVscePublish && result.status !== 0) {
         throw new Error(`Command failed with exit code ${result.status || 1}: ${command}`);
     }
 }

@@ -9,5 +9,5 @@ PUBLISHING.md
 .gitignore
 package-lock.json
 node_modules/**
-*.vsix
+dist/**
 *.log

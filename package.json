@@ -1,6 +1,6 @@
 {
-    "name": "vsnet-web-formatter",
-    "displayName": "VS.NET Formatter",
+    "name": "vsnet-formatter",
+    "displayName": "DotNet Formatter",
     "description": "Zero-configuration CSS, HTML, JavaScript and ASPX formatting in VS Code using Visual Studio's Format Document command.",
     "version": "0.9.0",
     "publisher": "edelciomolina",
@@ -50,7 +50,7 @@
         },
         "virtualWorkspaces": {
             "supported": false,
-            "description": "VS.NET Formatter requires Windows and Visual Studio 2022, which are not available in virtual workspaces."
+            "description": "DotNet Formatter requires Windows and Visual Studio 2022, which are not available in virtual workspaces."
         }
     },
     "activationEvents": [
@@ -66,7 +66,7 @@
         "test:watch": "vitest",
         "test:coverage": "vitest run --coverage",
         "test:integration": "node scripts/test-integration.js",
-        "package": "npm run check && vsce package",
+        "package": "npm run check && vsce package --out dist/",
         "publish": "node scripts/deploy.js",
         "vscode:prepublish": "npm run check"
     },
@@ -79,20 +79,20 @@
         "configurationDefaults": {
             "css.format.enable": false,
             "[css]": {
-                "editor.defaultFormatter": "edelciomolina.vsnet-web-formatter"
+                "editor.defaultFormatter": "edelciomolina.vsnet-formatter"
             },
             "[html]": {
-                "editor.defaultFormatter": "edelciomolina.vsnet-web-formatter"
+                "editor.defaultFormatter": "edelciomolina.vsnet-formatter"
             },
             "[javascript]": {
-                "editor.defaultFormatter": "edelciomolina.vsnet-web-formatter"
+                "editor.defaultFormatter": "edelciomolina.vsnet-formatter"
             },
             "[aspnet]": {
-                "editor.defaultFormatter": "edelciomolina.vsnet-web-formatter"
+                "editor.defaultFormatter": "edelciomolina.vsnet-formatter"
             }
         },
         "configuration": {
-            "title": "VS.NET Formatter",
+            "title": "DotNet Formatter",
             "properties": {
                 "vsnetWebFormatter.visualStudioProgId": {
                     "type": "string",

@@ -172,7 +172,7 @@ async function testFile(filePath) {
 
 async function main() {
     console.log("=".repeat(60));
-    console.log("VS.NET Formatter – Integration Test");
+    console.log("DotNet Formatter – Integration Test");
     console.log("=".repeat(60));
     console.log(`Test files : ${TEMP_DIR}`);
     console.log(`PS1 script : ${SCRIPT}`);

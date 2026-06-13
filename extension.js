@@ -5,7 +5,7 @@ const { createFormatDocument } = require("./lib/formatter");
 const supportedLanguages = ["css", "html", "javascript", "aspnet"];
 
 function activate(context) {
-    const outputChannel = vscode.window.createOutputChannel("VS.NET Formatter");
+    const outputChannel = vscode.window.createOutputChannel("DotNet Formatter");
     context.subscriptions.push(outputChannel);
 
     const formatDocument = createFormatDocument({
